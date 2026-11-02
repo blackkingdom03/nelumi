@@ -55,7 +55,7 @@
     "artifactName": "nelumi-${version}-${os}-${arch}.${ext}",
     "copyright": "Copyright © 2026 DeskCal and nelumi contributors",
     "asar": true,
-    "compression": "maximum",
+    "compression": "normal",
     "directories": {
       "output": "release",
       "buildResources": "assets"
@@ -71,20 +71,8 @@
       "icon": "assets/deskcal-icon.ico",
       "executableName": "nelumi",
       "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
-        },
-        {
-          "target": "zip",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
-        }
+        "nsis",
+        "zip"
       ],
       "artifactName": "nelumi-${version}-windows-${arch}.${ext}"
     },
@@ -106,13 +94,7 @@
       "icon": "assets/deskcal-icon.png",
       "category": "public.app-category.productivity",
       "target": [
-        {
-          "target": "dmg",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
-        }
+        "dmg"
       ],
       "artifactName": "nelumi-${version}-macos-${arch}.${ext}",
       "identity": null
@@ -123,18 +105,8 @@
       "category": "Office",
       "maintainer": "nelumi contributors <blackkingdom03@users.noreply.github.com>",
       "target": [
-        {
-          "target": "AppImage",
-          "arch": [
-            "x64"
-          ]
-        },
-        {
-          "target": "deb",
-          "arch": [
-            "x64"
-          ]
-        }
+        "AppImage",
+        "deb"
       ],
       "artifactName": "nelumi-${version}-linux-${arch}.${ext}"
     }
