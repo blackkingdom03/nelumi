@@ -16,3 +16,5 @@ const result = spawnSync(executable, ['--nelumi-release-test', ...(process.platf
 process.stdout.write(result.stdout || ''); process.stderr.write(result.stderr || '');
 if (result.error) throw result.error;
 if (result.status !== 0 || !result.stdout.includes('NELUMI_RELEASE_TEST_OK')) process.exit(1);
+const report = JSON.parse(result.stdout.split('NELUMI_RELEASE_TEST_OK ')[1].split('\n')[0]);
+if (report.arch !== arch || report.platform !== process.platform) throw Error('Packaged architecture or platform does not match target');

@@ -29,6 +29,7 @@ function install(profile) {
         assert.match(result.ocr, /15:00/);
         assert.equal(result.profile, path.join(profile, 'deskcal-data.json'));
         assert.equal(JSON.parse(fs.readFileSync(result.profile, 'utf8')).events[0].title, 'Release test');
+        result.arch = process.arch;
         console.log('NELUMI_RELEASE_TEST_OK ' + JSON.stringify(result));
         clearTimeout(timer);
         app.exit(0);

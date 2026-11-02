@@ -215,7 +215,11 @@
   }
 
   function getDayInfo(input) {
-    const date = input instanceof Date ? input : new Date(input);
+    // A calendar date is a local civil day, not midnight UTC. Parsing it as UTC
+    // would turn it into the preceding day on computers west of Greenwich.
+    const date = input instanceof Date ? input : new Date(
+      typeof input === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(input) ? `${input}T12:00:00` : input
+    );
     if (Number.isNaN(date.getTime())) throw new TypeError('Invalid calendar date');
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
