@@ -1,33 +1,120 @@
-# nelumi
+<p align="center">
+  <img src="assets/deskcal-icon.png" alt="nelumi 图标" width="76" />
+</p>
 
-一款面向 Windows 的桌面日程工具。把通知、消息或图片粘贴进日历，整理成事项，再用提醒与笔记跟进。
+<h1 align="center">nelumi</h1>
 
-基于 [DeskCal](https://github.com/kangkangStudent/DeskCal) 定制，界面参考 [neisme Calendar](https://github.com/dikafryo/neisme-Calendar)。这是独立维护的衍生项目，不是上述项目的官方版本。
+<p align="center"><strong>把群消息和通知图片，变成桌面上的日程。</strong></p>
 
-[下载 Windows 便携版](https://github.com/blackkingdom03/nelumi/releases/latest) · [反馈问题](https://github.com/blackkingdom03/nelumi/issues) · [开源来源与署名](THIRD_PARTY_NOTICES.md)
+<p align="center">中文通知提取 · 本地图片识别 · 农历生日提醒 · Windows 桌面日历</p>
 
-## 功能
+<p align="center">
+  <a href="https://github.com/blackkingdom03/nelumi/releases/latest"><strong>下载 Windows 版</strong></a>
+  &nbsp;·&nbsp;
+  <a href="#试试这三条消息">试用示例</a>
+  &nbsp;·&nbsp;
+  <a href="#开始使用">使用指南</a>
+  &nbsp;·&nbsp;
+  <a href="https://github.com/blackkingdom03/nelumi/issues">反馈建议</a>
+</p>
 
-- **桌面日历**：月、周与年份浏览，桌面组件、普通窗口、置顶显示，透明度调节。
-- **中国日历**：农历、节气、节日，以及已核验年份的放假与补班标记。
-- **通知转日程**：从整段中文中提取事项名称、日期、时间和地点；日期、时间与地点在原文中高亮。
-- **本地图片识别**：粘贴或选择图片，通过随程序提供的中文、英文 OCR 模型提取文字，再生成日程。
-- **重复与提醒**：支持阳历和农历生日、每年重复、提前一周或一天等提醒。生日、重复或带提醒的通知先打开编辑框供检查。
-- **活动时间段**：普通连续活动标记开始和结束；识别为每日打卡的活动在活动期内按天安排，报名时间另行标记。
-- **查找与整理**：关键词搜索、每天的事项数量、地点预览、完成状态、删除、撤销与重做。
-- **通知与笔记**：查看、编辑通知原文，复制全文，打开网址，记录自己的笔记。
-- **五种配色**：默认配色、海盐蓝、抹茶绿、藤萝紫、曜石黑。
+<p align="center">
+  <a href="https://github.com/blackkingdom03/nelumi/releases/latest"><img src="https://img.shields.io/github/v/release/blackkingdom03/nelumi?style=flat-square&amp;color=7057a5" alt="最新版本" /></a>
+  <a href="https://github.com/blackkingdom03/nelumi/actions/workflows/ci.yml"><img src="https://github.com/blackkingdom03/nelumi/actions/workflows/ci.yml/badge.svg" alt="自动检查状态" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-587d65?style=flat-square" alt="应用代码采用 MIT 许可证" /></a>
+</p>
 
-## 下载与使用
+讲座时间在群通知里，报名截止日期藏在长消息里，活动安排又是一张图片。nelumi 帮你把这些信息整理到桌面日历中，保留原文，并留出记录笔记的位置。
 
-1. 到 [Releases](https://github.com/blackkingdom03/nelumi/releases/latest) 下载 `nelumi-0.5.0-windows-x64.zip`。
-2. 将整个压缩包解压到自己有写入权限的文件夹，双击 `nelumi.exe`。请勿在压缩包内直接运行，也不要只移动 EXE。
-3. 在消息框粘贴通知，按 **Enter** 或点击“确定”添加；**Shift + Enter** 换行。图片识别完成后先核对文字。
-4. 点击事项查看原文、笔记或编辑详情；点击日期上的数量圆圈查看当天的全部事项。
+**粘贴消息 → 提取事项、日期和地点 → 在日历中查看与提醒。**
 
-当前便携版面向 Windows 10/11 x64。程序尚未进行代码签名；下载后可使用 Release 中的 SHA-256 校验文件确认文件完整性。
+无需注册账号或配置 AI 密钥。文字提取与图片识别在本机完成。适合经常整理课程、讲座、会议、报名和个人纪念日的人。
 
-日程提醒需要程序正在运行，电脑关机或程序退出期间不能保证提醒。文字提取和 OCR 都可能出错，重要事项请核对日期、时间、重复规则及地点。
+## 从收到通知，到安排好下一件事
+
+| 你收到的信息 | nelumi 帮你整理 |
+| --- | --- |
+| 一段会议或讲座通知 | 提取主题、日期、时间与地点，并在原文中高亮关键内容 |
+| 一张活动海报或通知截图 | 在本机识别中英文文字，核对后生成日程 |
+| “每年过生日，提前一周和一天提醒” | 预填生日、每年重复和提醒选项，打开编辑框供你确认 |
+| 一段活动起止日期 | 普通活动标记开始和结束；每日打卡活动按天安排 |
+| 同一天有好几件事 | 用数字圆圈显示事项数量，展开查看时间及已填写的地点 |
+| 需要回头查找的安排 | 按关键词搜索，并把通知原文和自己的笔记一起留在事项中 |
+
+## 试试这三条消息
+
+以下均为虚构示例，已用当前版本的解析器核对。没有写年份的日期按输入当年识别。
+
+### 一场会议，时间和地点一起填好
+
+```text
+主题：项目评审会议
+时间：11月5日15:00
+地点：一楼会议室
+```
+
+得到 **11 月 5 日 15:00 · 项目评审会议**，地点填入“一楼会议室”。保存后，原文仍然保留在事项详情中。
+
+### 一次设置，记住每年的生日
+
+```text
+小林的生日是阳历12月8日，每年提醒，提前1周和1天提醒。
+地点：家里
+```
+
+编辑框会预填 **12 月 8 日、每年重复、提前 7 天与 1 天提醒**，你检查后再保存。农历生日也可以设置；遇到无对应闰月或日期的年份，会保留提示供确认，不擅自换到另一天。
+
+### 连续打卡，在活动期内每天出现
+
+```text
+活动名称：读书打卡
+活动时间：11月3日至11月9日
+每天晚上20:00打卡
+```
+
+预填 **11 月 3—9 日每天 20:00** 的打卡事项，确认后加入日历。普通起止活动仍按开始和结束两天标记。
+
+> 普通通知可直接添加；生日、重复或带提醒的消息会先打开编辑框。提取和图片识别可能出错，重要安排请核对后再使用，也可以随时编辑或撤销。
+
+## 放在桌面上，也照顾你的使用习惯
+
+- **熟悉的中国日历**：查看农历、节气、节日，以及已核验年份的放假与补班。[查看资料范围](#日历资料的范围)
+- **按自己的节奏浏览**：月、周与年份视图，搜索日程，查看当天全部事项。
+- **通知与笔记放在一起**：编辑原文、复制全文、打开其中的网址，再补上要带的材料和待办细节。
+- **选择合适的显示方式**：桌面组件、普通窗口或置顶显示，可调整背景透明度。
+- **五种配色随时切换**：默认配色、海盐蓝、抹茶绿、藤萝紫、曜石黑。
+- **操作可以回退**：支持完成标记、删除、撤销与重做。
+
+## 开始使用
+
+**[下载最新版 Windows 便携包 →](https://github.com/blackkingdom03/nelumi/releases/latest)**
+
+支持 **Windows 10 / 11 · x64**。无需安装向导，完整解压即可运行。
+
+1. 在下载页选择 `nelumi-版本号-windows-x64.zip`。仅使用软件时，不需要下载 `Source code`。
+2. 解压整个文件夹到有写入权限的位置，双击 `nelumi.exe`；请勿在压缩包内运行，也不要只移动 EXE。
+3. 在消息框粘贴文字或图片。按 **Enter** 或点击“确定”处理消息；**Shift + Enter** 换行。图片识别完成后先核对文字，再确定添加。
+4. 点击事项查看原文与笔记，点击日期上的数量圆圈查看当天全部安排。
+
+当前程序尚未进行代码签名；下载页提供 SHA-256 校验文件。更新已有版本前，请先备份自己的数据，具体位置见下文。
+
+## 常见问题
+
+**需要账号、联网或付费 AI 服务吗？**
+
+日程管理不需要注册账号，文字提取和图片识别使用本地规则与随包提供的模型，不需要 AI 密钥。获取日历资料、下载更新或打开外部网址时，需要访问相应网络服务。
+
+**消息没有年份，或者没有具体时间，会怎样处理？**
+
+未注明年份时使用当年；完全没有日期时放到今天，未写具体几点时按全天事项处理。缺失信息仍建议你手动补全。
+
+**退出程序后还能提醒吗？**
+
+提醒需要程序保持运行。电脑关机或程序退出期间，不能保证发出提醒；全天事项的提醒时刻可在编辑框中设置。
+
+**未来年份的调休也确定了吗？**
+
+可以浏览未来年份，但未来调休只有在官方公布并完成核验后才作为正式安排。当前随附正式核验资料为 2026 年。
 
 ## 数据与隐私
 
@@ -39,9 +126,14 @@
 
 ## 日历资料的范围
 
+<details>
+<summary>查看权威来源、核验记录与适用范围</summary>
+
 农历与节气使用 `lunar-javascript`，并结合香港天文台的 1901—2100 年历表核对与修正。核验快照和差异记录在 [`audit/calendar-2026-10-22`](audit/calendar-2026-10-22)，来源与适用条款见 [第三方声明](THIRD_PARTY_NOTICES.md)。1901 年初的部分字段核验覆盖有限，报告保留了这一范围。
 
 **放假与补班以国务院办公厅对应年份的公告为准。** 当前随附正式核验资料为 2026 年；能浏览未来年份不等于未来调休安排已经公布。天文台也提示部分远期新月、节气日期可能存在一天差异，因此本项目不承诺所有年份绝对无误。
+
+</details>
 
 ## 本地开发
 
@@ -66,6 +158,18 @@ npm run dist:portable
 
 ## 许可证与致谢
 
+nelumi 基于 [DeskCal](https://github.com/kangkangStudent/DeskCal) 定制，界面参考 [neisme Calendar](https://github.com/dikafryo/neisme-Calendar)。这是独立维护的衍生项目，不是上述项目的官方版本。
+
 应用代码使用 [MIT 许可证](LICENSE)，保留 DeskCal 的原有版权声明。感谢 DeskCal、neisme Calendar、Bootstrap Icons、lunar-javascript、Tesseract.js 及相关数据来源。
 
 OCR 引擎、模型、Electron 和历表数据各有相应许可证或使用条款；本仓库的 MIT 许可证不替代它们。完整出处、版本与复用范围请阅读 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+
+## 一起让通知更好整理
+
+如果某段通知没有正确识别，欢迎提交[问题反馈](https://github.com/blackkingdom03/nelumi/issues/new?template=bug_report.yml)，附上去除个人信息后的示例。希望增加功能，可以提交[功能建议](https://github.com/blackkingdom03/nelumi/issues/new?template=feature_request.yml)。
+
+喜欢这个项目，可以点一个 **Star**，或把[下载页](https://github.com/blackkingdom03/nelumi/releases/latest)分享给同样需要整理通知的人。参与开发请阅读 [贡献指南](CONTRIBUTING.md)。
+
+---
+
+**English overview:** nelumi is a local-first Windows desktop calendar for turning Chinese notices and images into scheduled tasks. It includes on-device OCR, lunar and solar birthday recurrence, reminders, source-text notes, and five themes. The current interface is in Chinese. [Download for Windows](https://github.com/blackkingdom03/nelumi/releases/latest).
