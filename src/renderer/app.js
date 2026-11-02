@@ -1553,7 +1553,8 @@ function submitQuickAdd(event) {
 }
 
 async function updateSettings(patch) {
-  state.settings = await window.deskcal.updateSettings(patch);
+  try { state.settings = await window.deskcal.updateSettings(patch); }
+  catch (error) { showToast(error.message || '设置未能保存', '设置失败'); }
   render();
 }
 

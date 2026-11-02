@@ -8,6 +8,7 @@ function launch({ packaged = false, lock = true, fail = false, readOnly = false 
   const calls = { paths: {}, loaded: false, quit: false, error: false };
   const app = {
     isPackaged: packaged,
+    getPath: () => path.resolve('test-app-data'),
     setPath: (name, value) => { calls.paths[name] = value; },
     requestSingleInstanceLock: () => lock,
     quit: () => { calls.quit = true; },
@@ -15,7 +16,7 @@ function launch({ packaged = false, lock = true, fail = false, readOnly = false 
   };
   vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../src/portable-main.js'), 'utf8'), {
     __dirname: path.resolve(__dirname, '../src'),
-    process: { execPath: path.resolve('release/win-unpacked/nelumi.exe') },
+    process: { execPath: 'D:\\Apps\\nelumi\\nelumi.exe', platform: 'win32', env: {}, argv: [], pid: 123 },
     require(name) {
       if (name === 'electron') return { app, BrowserWindow: { getAllWindows: () => [] }, dialog: { showErrorBox: () => { calls.error = true; } } };
       if (name === 'node:fs') return {
@@ -24,6 +25,7 @@ function launch({ packaged = false, lock = true, fail = false, readOnly = false 
         unlinkSync() {}
       };
       if (name === 'node:path') return path;
+      if (name === './platform-support') return require('../src/platform-support');
       if (name === './main') { calls.loaded = true; return {}; }
       throw new Error(`Unexpected import: ${name}`);
     }
@@ -33,7 +35,7 @@ function launch({ packaged = false, lock = true, fail = false, readOnly = false 
 
 test('portable profile stays alongside the executable, separate from upstream DeskCal', () => {
   const result = launch({ packaged: true });
-  assert.equal(result.paths.userData, path.resolve('release/win-unpacked/data'));
+  assert.equal(result.paths.userData, 'D:\\Apps\\nelumi\\data');
   assert.equal(result.paths.sessionData, result.paths.userData);
   assert.equal(result.loaded, true);
 });

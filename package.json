@@ -1,21 +1,24 @@
 {
   "name": "nelumi",
-  "version": "0.5.0",
-  "description": "Windows desktop calendar with local schedules and reminders",
+  "version": "0.6.0-beta.1",
+  "description": "Local-first desktop calendar with Chinese notice extraction and reminders",
   "main": "src/portable-main.js",
   "scripts": {
     "start": "electron .",
     "dev": "electron .",
-    "check": "node --check src/main.js && node --check src/preload.js && node --check src/calendar-core.js && node --check src/chinese-calendar.js && node --check src/quick-input.js && node --check src/planner-core.js && node --check src/data-model.js && node --check src/renderer/app.js && node --check tests/electron-smoke.js && node --check src/notice-input.js && node --check src/renderer/navigation.js && node --check src/renderer/notebook.js && node --check src/notice-ocr.js",
+    "check": "node --check src/main.js && node --check src/preload.js && node --check src/calendar-core.js && node --check src/chinese-calendar.js && node --check src/quick-input.js && node --check src/planner-core.js && node --check src/data-model.js && node --check src/renderer/app.js && node --check tests/electron-smoke.js && node --check src/notice-input.js && node --check src/renderer/navigation.js && node --check src/renderer/notebook.js && node --check src/notice-ocr.js && node --check src/platform-support.js && node --check src/portable-main.js && node --check src/release-smoke.js && node --check scripts/release-smoke.cjs",
     "test": "node --test tests/*.test.js",
     "test:layout": "electron tests/neisme-layout.js",
     "test:settings": "electron tests/settings-window.js",
     "dist:portable": "electron-builder --win --dir --x64",
     "smoke": "electron tests/electron-smoke.js",
-    "dist:win": "electron-builder --win nsis --x64",
+    "dist:win": "electron-builder --win --x64 --publish never",
     "test:navigation": "electron tests/navigation-window.js",
     "test:notebook": "electron tests/notebook-window.js",
-    "test:ocr": "electron tests/notice-ocr-window.js"
+    "test:ocr": "electron tests/notice-ocr-window.js",
+    "dist:win:arm64": "electron-builder --win --arm64 --publish never",
+    "dist:mac": "electron-builder --mac --x64 --arm64 --publish never",
+    "dist:linux": "electron-builder --linux --x64 --publish never"
   },
   "keywords": [
     "calendar",
@@ -49,7 +52,7 @@
   "build": {
     "appId": "local.deskcal.neisme",
     "productName": "nelumi",
-    "artifactName": "nelumi-Setup-${version}-${arch}.${ext}",
+    "artifactName": "nelumi-${version}-${os}-${arch}.${ext}",
     "copyright": "Copyright © 2026 DeskCal and nelumi contributors",
     "asar": true,
     "compression": "maximum",
@@ -71,10 +74,19 @@
         {
           "target": "nsis",
           "arch": [
-            "x64"
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "arm64"
           ]
         }
-      ]
+      ],
+      "artifactName": "nelumi-${version}-windows-${arch}.${ext}"
     },
     "nsis": {
       "oneClick": false,
@@ -87,7 +99,44 @@
       "deleteAppDataOnUninstall": false,
       "installerIcon": "assets/deskcal-icon.ico",
       "uninstallerIcon": "assets/deskcal-icon.ico",
-      "installerHeaderIcon": "assets/deskcal-icon.ico"
+      "installerHeaderIcon": "assets/deskcal-icon.ico",
+      "artifactName": "nelumi-${version}-windows-${arch}-setup.${ext}"
+    },
+    "mac": {
+      "icon": "assets/deskcal-icon.png",
+      "category": "public.app-category.productivity",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "artifactName": "nelumi-${version}-macos-${arch}.${ext}",
+      "identity": null
+    },
+    "linux": {
+      "icon": "assets/deskcal-icon.png",
+      "executableName": "nelumi",
+      "category": "Office",
+      "maintainer": "nelumi contributors <blackkingdom03@users.noreply.github.com>",
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "nelumi-${version}-linux-${arch}.${ext}"
     }
   }
 }

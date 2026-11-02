@@ -17,6 +17,7 @@ const CalendarCore = require('./calendar-core');
 const DataModel = require('./data-model');
 const TitleUpgrades = require('./title-upgrades');
 const NoticeLinks = require('./notice-links');
+const { setStartOnBoot } = require('./platform-support');
 const {createHolidayStore} = require('./holiday-store');
 const { DEFAULT_DATA, SCHEMA_VERSION } = DataModel;
 
@@ -136,9 +137,10 @@ function applyWindowSettings() {
   // Background alpha is applied in the renderer; native opacity would fade text too.
   mainWindow.setOpacity(1);
   mainWindow.setAlwaysOnTop(windowMode === 'top', 'floating');
-  mainWindow.setSkipTaskbar(windowMode !== 'floating');
+  // Some Linux desktops have no tray host. Keep a taskbar entry as a recovery path.
+  mainWindow.setSkipTaskbar(process.platform === 'win32' && windowMode !== 'floating');
   mainWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: false });
-  mainWindow.setIgnoreMouseEvents(Boolean(clickThrough) && !settingsPanelOpen, { forward: true });
+  mainWindow.setIgnoreMouseEvents(process.platform !== 'linux' && Boolean(clickThrough) && !settingsPanelOpen, { forward: true });
 }
 
 function createWindow() {
@@ -187,7 +189,8 @@ function createWindow() {
   mainWindow.on('close', (event) => {
     if (!isQuitting) {
       event.preventDefault();
-      mainWindow.hide();
+      if (process.platform === 'linux') mainWindow.minimize();
+      else mainWindow.hide();
     }
   });
 
@@ -240,6 +243,7 @@ function updateTrayMenu() {
       },
       {
         label: '鼠标穿透',
+        enabled: process.platform !== 'linux',
         type: 'checkbox',
         checked: appData.settings.clickThrough,
         click: (item) => {
@@ -270,7 +274,12 @@ function updateTrayMenu() {
 }
 
 function createTray() {
-  tray = new Tray(createAppIcon().resize({ width: 20, height: 20 }));
+  try { tray = new Tray(createAppIcon().resize({ width: 20, height: 20 })); }
+  catch (error) {
+    console.warn('系统托盘不可用:', error.message);
+    mainWindow.setSkipTaskbar(false);
+    return;
+  }
   tray.setToolTip('nelumi');
   tray.on('click', () => {
     showWindow();
@@ -428,15 +437,10 @@ function registerIpc() {
   });
 
   ipcMain.handle('settings:update', (_event, patch) => {
-    appData.settings = { ...appData.settings, ...(patch || {}) };
     if (Object.hasOwn(patch || {}, 'startOnBoot')) {
-      const loginSettings = {
-        openAtLogin: Boolean(appData.settings.startOnBoot),
-        path: process.execPath
-      };
-      if (!app.isPackaged) loginSettings.args = [app.getAppPath()];
-      app.setLoginItemSettings(loginSettings);
+      setStartOnBoot(app, patch.startOnBoot);
     }
+    appData.settings = { ...appData.settings, ...(patch || {}) };
     persistData();
     applyWindowSettings();
     updateTrayMenu();
@@ -447,7 +451,8 @@ function registerIpc() {
     if (!mainWindow || mainWindow.isDestroyed()) return false;
     switch (action) {
       case 'hide':
-        mainWindow.hide();
+        if (process.platform === 'linux') mainWindow.minimize();
+        else mainWindow.hide();
         break;
       case 'minimize':
         mainWindow.minimize();
@@ -499,6 +504,13 @@ function registerIpc() {
 
 app.whenReady().then(() => {
   app.setAppUserModelId('local.deskcal.neisme');
+  if (process.platform === 'darwin') {
+    Menu.setApplicationMenu(Menu.buildFromTemplate([
+      { label: 'nelumi', submenu: [{ role: 'about' }, { type: 'separator' }, { role: 'hide' }, { role: 'quit' }] },
+      { label: '编辑', submenu: [{ role: 'undo' }, { role: 'redo' }, { type: 'separator' }, { role: 'cut' }, { role: 'copy' }, { role: 'paste' }, { role: 'selectAll' }] },
+      { label: '窗口', submenu: [{ label: '显示日历', click: showWindow }, { role: 'minimize' }] }
+    ]));
+  }
   if (loadData() === false) return;
   holidayStore = createHolidayStore(path.join(app.getPath('userData'), 'china-holidays-cache.json'));
   registerIpc();

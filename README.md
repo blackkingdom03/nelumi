@@ -6,10 +6,10 @@
 
 <p align="center"><strong>把群消息和通知图片，变成桌面上的日程。</strong></p>
 
-<p align="center">中文通知提取 · 本地图片识别 · 农历生日提醒 · Windows 桌面日历</p>
+<p align="center">中文通知提取 · 本地图片识别 · 农历生日提醒 · 电脑桌面日历</p>
 
 <p align="center">
-  <a href="https://github.com/blackkingdom03/nelumi/releases/latest"><strong>下载 Windows 版</strong></a>
+  <a href="https://github.com/blackkingdom03/nelumi/releases/latest"><strong>下载稳定版</strong></a>
   &nbsp;·&nbsp;
   <a href="https://blackkingdom03.github.io/nelumi/">网页预览</a>
   &nbsp;·&nbsp;
@@ -32,7 +32,7 @@
 
 ## 先看看用起来是什么样
 
-下面的截图和网页都用了虚构日程。点图片可以打开对应的网页预览，试着切换配色、点开事项。网页里的修改刷新后就会恢复；桌面提醒和图片识别请使用 Windows 版。
+下面的截图和网页都用了虚构日程。点图片可以打开对应的网页预览，试着切换配色、点开事项。网页里的修改刷新后就会恢复；桌面提醒和图片识别请使用桌面版。
 
 ### 日程、通知和笔记，放在一起
 
@@ -113,6 +113,22 @@
 - **五种配色随时切换**：默认配色、海盐蓝、抹茶绿、藤萝紫、曜石黑。
 - **操作可以回退**：支持完成标记、删除、撤销与重做。
 
+## 选择你的电脑版本
+
+原 Windows 稳定版继续保留；新增的多平台版本先作为测试版提供。
+
+**[多平台测试版 v0.6.0-beta.1 →](https://github.com/blackkingdom03/nelumi/releases/tag/v0.6.0-beta.1)** · [Windows 稳定版 →](https://github.com/blackkingdom03/nelumi/releases/latest)
+
+| 电脑 | 对应文件（省略版本号前缀） |
+| --- | --- |
+| Windows · Intel / AMD | `windows-x64-setup.exe` 安装版 / `windows-x64.zip` 便携版 |
+| Windows · ARM / 骁龙 | `windows-arm64-setup.exe` / `windows-arm64.zip` |
+| Mac · M 系列芯片 | `macos-arm64.dmg` |
+| Mac · Intel | `macos-x64.dmg` |
+| Linux · Intel / AMD | `linux-x64.AppImage` / `linux-x64.deb` |
+
+测试版需要通过五类测试机的自动检查后才发布；尚未覆盖所有真实设备上的通知、开机启动和桌面显示。安装包未签名，Mac 版未经过 Apple 公证。[查看适配范围与验证方式](docs/desktop-platforms.md)。
+
 ## 开始使用
 
 **[下载最新版 Windows 便携包 →](https://github.com/blackkingdom03/nelumi/releases/latest)**
@@ -146,7 +162,7 @@
 
 ## 数据与隐私
 
-日程及设置保存在程序旁的 `data/` 文件夹，主要数据文件是 `data/deskcal-data.json`。开发模式使用 `.profile/`。通知提取与图片 OCR 在本地执行，不需要配置云端 AI 服务；OCR 模型随程序提供。
+Windows 日程及设置仍保存在程序旁的 `data/` 文件夹，主要数据文件是 `data/deskcal-data.json`。Mac 使用 `~/Library/Application Support/nelumi/`，Linux 使用 `$XDG_CONFIG_HOME/nelumi/`（通常是 `~/.config/nelumi/`）。开发模式使用 `.profile/`。多台设备暂不自动同步，可以通过导出、导入备份转移日程。通知提取与图片 OCR 在本地执行，不需要配置云端 AI 服务；OCR 模型随程序提供。
 
 更新前退出程序并备份整个 `data/` 文件夹，然后替换程序文件，保留自己的数据。新版本发布包不包含个人日程、笔记或测试账户。
 
@@ -165,7 +181,7 @@
 
 ## 本地开发
 
-需要 Git、Node.js 22 或更新版本，以及 Windows（运行桌面功能时）。
+需要 Git、Node.js 22 或更新版本，以及 Windows、macOS 或 Linux 桌面环境。
 
 ```bash
 git clone https://github.com/blackkingdom03/nelumi.git
@@ -176,13 +192,15 @@ npm test
 npm start
 ```
 
-构建便携版目录：
+构建 Windows 便携版目录：
 
 ```bash
 npm run dist:portable
 ```
 
 产物在 `release/win-unpacked/`，发布时应打包整个目录，并确认其中不含运行后生成的 `data/`。Electron 窗口测试可通过 `npm run test:settings`、`npm run test:notebook`、`npm run test:ocr` 等命令运行；这些测试会创建临时测试配置目录。
+
+其他平台使用 `npm run dist:mac`、`npm run dist:linux`，Windows ARM 使用 `npm run dist:win:arm64`。请在对应系统构建；发布前运行打包产物检查，具体见 [适配说明](docs/desktop-platforms.md)。
 
 ## 许可证与致谢
 
@@ -202,4 +220,4 @@ OCR 引擎、模型、Electron 和历表数据各有相应许可证或使用条�
 
 ---
 
-**English overview:** nelumi is a local-first Windows desktop calendar for turning Chinese notices and images into scheduled tasks. It includes on-device OCR, lunar and solar birthday recurrence, reminders, source-text notes, and five themes. The current interface is in Chinese. [Download for Windows](https://github.com/blackkingdom03/nelumi/releases/latest).
+**English overview:** nelumi is a local-first desktop calendar for turning Chinese notices and images into scheduled tasks. It includes on-device OCR, lunar and solar birthday recurrence, reminders, source-text notes, and five themes. The current interface is in Chinese. [Windows stable release](https://github.com/blackkingdom03/nelumi/releases/latest) · [Windows / macOS / Linux beta](https://github.com/blackkingdom03/nelumi/releases/tag/v0.6.0-beta.1).
