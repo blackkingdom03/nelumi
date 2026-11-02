@@ -125,7 +125,7 @@
 | Windows · ARM / 骁龙 | `windows-arm64-setup.exe` / `windows-arm64.zip` |
 | Mac · M 系列芯片 | `macos-arm64.dmg` |
 | Mac · Intel | `macos-x64.dmg` |
-| Linux · Intel / AMD | `linux-x64.AppImage` / `linux-x64.deb` |
+| Linux · Intel / AMD | `linux-x86_64.AppImage` / `linux-amd64.deb` |
 
 测试版需要通过五类测试机的自动检查后才发布；尚未覆盖所有真实设备上的通知、开机启动和桌面显示。安装包未签名，Mac 版未经过 Apple 公证。[查看适配范围与验证方式](docs/desktop-platforms.md)。
 
