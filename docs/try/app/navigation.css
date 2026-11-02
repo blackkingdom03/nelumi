@@ -1,0 +1,43 @@
+/* Sidebar shares the titlebar's existing surface; only the workspace scrolls. */
+.app-shell { display: grid; grid-template-columns: 44px minmax(0,1fr); grid-template-rows: 36px minmax(0,1fr); }
+.app-shell > .titlebar { grid-column: 1 / -1; grid-row: 1; }
+.app-shell > .workspace { grid-column: 2; grid-row: 2; height: 100%; min-width: 0; min-height: 0; }
+.app-navigation { grid-column: 1; grid-row: 2; width: 44px; display: flex; flex-direction: column; align-items: center; gap: 4px; padding-top: 16px; border-right: 1px solid var(--line); }
+.app-navigation button { display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 0; border-radius: 7px; background: transparent; color: var(--muted); }
+.app-navigation button:hover, .app-navigation button[aria-current="page"] { background: var(--panel-subtle); color: var(--text); }
+.app-navigation button svg { width: 16px; height: 16px; fill: currentColor; stroke: none; }
+.workspace.year-browser-open > .calendar-panel,
+.workspace.year-browser-open > .agenda-panel,
+.workspace.year-browser-open > .notebook-panel { display: none; }
+.year-browser { padding: 20px; min-width: 0; }
+.year-browser[hidden], .navigation-return[hidden] { display: none; }
+.year-browser button, .navigation-return { border: 1px solid var(--line); border-radius: 7px; background: var(--panel); color: var(--text); padding: 7px 10px; }
+.year-browser button:hover, .navigation-return:hover { background: var(--panel-subtle); }
+.year-browser button:disabled { opacity: .4; cursor: default; }
+.year-browser-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.year-browser h2 { font-size: 20px; margin: 0; }
+.year-browser-heading > button { font-size: 12px; }
+.navigation-year-form { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 18px; font-size: 12px; }
+.navigation-year-form input { width: 90px; min-width: 0; color: var(--text); background: var(--panel-solid); border: 1px solid var(--line); border-radius: 7px; padding: 7px; }
+#navigationYearRange, .year-data-notice { color: var(--muted); font-size: 11px; line-height: 1.7; }
+.year-page-controls { display: flex; align-items: center; justify-content: center; gap: 22px; margin: 24px 0 16px; }
+.year-choice-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+.year-choice-grid > button { min-height: 72px; font-size: 18px; }
+.year-choice-grid > button[aria-current="date"] { border-color: var(--accent); background: var(--accent-soft); }
+.year-months-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,220px),1fr)); gap: 16px; }
+.mini-month { min-width: 0; border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 10px; }
+.mini-month h3 { margin: 0 0 9px; font-size: 14px; }
+.mini-month h3 button { width: 100%; border: 0; padding: 5px; text-align: left; font-weight: 600; background: transparent; }
+.mini-weekdays, .mini-days { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: 3px; }
+.mini-weekdays { font-size: 10px; text-align: center; color: var(--muted); margin-bottom: 5px; }
+.mini-days .mini-day { position: relative; min-width: 0; min-height: 33px; padding: 3px 0; font-size: 11px; border: 1px solid transparent; border-radius: 5px; background: transparent; }
+.mini-day.today { color: var(--danger); font-weight: 700; }
+.mini-days .mini-day.selected { border-color: var(--accent); background: var(--accent-soft); }
+.mini-holiday-badge { position: absolute; right: -1px; top: -3px; font-size: 8px; line-height: 12px; color: var(--danger); background: var(--panel-solid); border-radius: 2px; }
+.mini-holiday-badge.workday { color: var(--workday-text); }
+.mini-day-label { display: block; font-size: 8px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: var(--muted); }
+.navigation-return { align-self: flex-start; margin: 10px 16px 0; font-size: 12px; flex: 0 0 auto; }
+@media (max-width: 620px) { .year-browser { padding: 12px; } .year-choice-grid { gap: 8px; } .year-choice-grid > button { min-height: 60px; } }
+.holiday-update-row { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; color:var(--muted); font-size:12px; margin:4px 0 8px; }
+.holiday-update-row .text-button { flex-shrink:0; font-size:12px; padding:4px 8px; }
+.holiday-update-row .year-data-notice { margin:0; }

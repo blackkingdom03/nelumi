@@ -1,0 +1,117 @@
+/* Approved nelumi palettes. Design references: previews/palette-20261023/REFERENCES.md. */
+:root[data-palette] {
+ --radius:14px; --card-shadow:none;
+ --surface-rgb:244,247,251; --panel-solid:#fff; --panel-subtle:#eaf0f7;
+ --panel:color-mix(in srgb,var(--panel-solid) calc(var(--surface-opacity)*100%),transparent);
+ --text:#26354a; --muted:#64748b; --line:#dde5ef;
+ --accent:#3868a4; --accent-strong:#2c5487; --accent-soft:#e6effa;
+ --danger:#ac4854; --solar-term-text:#28796b; --workday-text:#946021;
+ --canvas:#f4f7fb; --card:#fff; --memo:#f0f4f9; --rail:#ecf1f7;
+ --today:#3868a4; --today-text:#fff; --holiday:#fff3f3; --workday:#fff7e9;
+ --gap:5px; --cell-radius:6px; --split:minmax(0,1fr) minmax(0,1fr); --cal-height:530px;
+}
+:root[data-palette="B"] {
+ --surface-rgb:247,247,240; --panel-solid:#fffef9; --panel-subtle:#e9eddf;
+ --text:#374537; --muted:#66715e; --line:#dde2d4;
+ --accent:#557248; --accent-strong:#435c38; --accent-soft:#e5eddc;
+ --danger:#a8554d; --solar-term-text:#44765d; --workday-text:#88662d;
+ --canvas:#f7f7f0; --card:#fffef9; --memo:#eef1e6; --rail:#ebeee2;
+ --today:#557248; --today-text:#fff; --holiday:#faf0e9; --workday:#f7f0df;
+ --gap:9px; --cell-radius:12px; --split:minmax(0,1.12fr) minmax(0,1fr); --cal-height:550px;
+}
+:root[data-palette="C"] {
+ --surface-rgb:247,245,251; --panel-solid:#fff; --panel-subtle:#eeeaf6;
+ --text:#3b3450; --muted:#766d86; --line:#e4deef;
+ --accent:#7656a5; --accent-strong:#5e428a; --accent-soft:#eee5f7;
+ --danger:#ad4c68; --solar-term-text:#438378; --workday-text:#936b34;
+ --canvas:#f7f5fb; --card:#fff; --memo:#f1ecf8; --rail:#eee9f7;
+ --today:#7656a5; --today-text:#fff; --holiday:#fcf1f6; --workday:#fcf6e9;
+ --gap:10px; --cell-radius:14px; --split:minmax(0,1fr) minmax(0,1.08fr); --cal-height:550px;
+ --card-shadow:0 2px 7px #37255409;
+}
+:root[data-palette="D"] {
+ color-scheme:dark;
+ --surface-rgb:30,30,46; --panel-solid:#272738; --panel-subtle:#363648;
+ --text:#dce2f4; --muted:#a6adc8; --line:#424256;
+ --accent:#b4befe; --accent-strong:#cdd3ff; --accent-soft:#3c3d59;
+ --danger:#f38ba8; --solar-term-text:#94e2d5; --workday-text:#f9c58b;
+ --canvas:#1e1e2e; --card:#292939; --memo:#242434; --rail:#181825;
+ --today:#b4befe; --today-text:#24243b; --holiday:#352b3b; --workday:#38322d;
+ --gap:6px; --cell-radius:8px; --split:1fr 1fr; --cal-height:530px;
+}
+
+html[data-palette] .app-shell {grid-template-columns:52px minmax(0,1fr);grid-template-rows:40px minmax(0,1fr);background:color-mix(in srgb,var(--canvas) calc(var(--surface-opacity)*100%),transparent);}
+html[data-palette] .titlebar {height:40px;background:color-mix(in srgb,var(--card) calc(var(--surface-opacity)*100%),transparent);padding:0 12px 0 16px;}
+html[data-palette] .brand {font-size:12px;}
+html[data-palette] .app-navigation {width:52px;background:color-mix(in srgb,var(--rail) calc(var(--surface-opacity)*100%),transparent);gap:10px;padding-top:18px;}
+html[data-palette] .app-navigation button {width:36px;height:36px;}
+html[data-palette] .app-navigation button[aria-current="page"] {color:var(--accent);background:var(--accent-soft);}
+html[data-palette] .app-navigation button svg {width:19px;height:19px;}
+html[data-palette] .calendar-panel {flex:0 0 var(--cal-height);padding:20px 24px 8px;}
+html[data-palette] h1 {font-size:26px;}
+html[data-palette] .calendar-toolbar {min-height:40px;}
+html[data-palette] .calendar-grid {gap:var(--gap);min-height:380px;}
+html[data-palette] .week-header {margin-top:14px;}
+html[data-palette] .week-header span {font-size:12px;}
+html[data-palette] .day-cell {background:color-mix(in srgb,var(--card) calc(var(--surface-opacity)*100%),transparent);border:1px solid var(--line);border-radius:var(--cell-radius);padding:7px 8px;box-shadow:var(--card-shadow);}
+html[data-palette] .day-cell .day-top {min-height:21px;flex-basis:21px;}
+html[data-palette] .day-cell .day-number {font-size:13px;width:24px;height:21px;}
+html[data-palette] .day-cell .chinese-day-label {font-size:11px;line-height:16px;}
+html[data-palette] .day-cell.official-holiday {background:color-mix(in srgb,var(--holiday) calc(var(--surface-opacity)*100%),transparent);border-color:color-mix(in srgb,var(--danger) 25%,var(--line));}
+html[data-palette] .day-cell.workday-override {background:color-mix(in srgb,var(--workday) calc(var(--surface-opacity)*100%),transparent);border-color:color-mix(in srgb,var(--workday-text) 35%,var(--line));}
+html[data-palette] .day-cell.today {background:var(--accent-soft);border-color:var(--accent);box-shadow:none;}
+html[data-palette] .day-cell.today .day-number {background:var(--today);color:var(--today-text);border-radius:50%;}
+html[data-palette] .day-cell.today .chinese-day-label,html[data-palette] .day-cell.today .event-more {color:var(--accent);}
+html[data-palette] .day-cell.selected:not(.today) {background:var(--accent-soft);border-color:var(--accent);box-shadow:none;}
+html[data-palette] .day-cell.outside {background:transparent;opacity:.7;}
+html[data-palette] .month-event-preview,html[data-palette] .day-cell.today .month-event-preview {font-size:11px;line-height:1.5;background:color-mix(in srgb,var(--event-color) 12%,var(--card));color:var(--text);}
+html[data-palette] .day-badge {font-size:10px;height:17px;min-width:17px;}
+html[data-palette] .agenda-panel {min-height:236px;flex:0 0 auto;padding:16px 24px 18px;background:color-mix(in srgb,var(--memo) calc(var(--surface-opacity)*100%),transparent);grid-template-columns:var(--split);gap:24px;}
+html[data-palette] .agenda-panel .notice-composer {padding-left:24px;}
+html[data-palette] .agenda-header h2 {font-size:20px;}
+html[data-palette] .agenda-header .muted,html[data-palette] .agenda-header .lunar-meta {font-size:11px;}
+html[data-palette] .agenda-item {padding:10px 12px;}
+html[data-palette] .agenda-content h3 {font-size:13px;}
+html[data-palette] .agenda-list-side .agenda-list {min-height:40px;}
+html[data-palette] .notice-composer textarea {height:104px;min-height:104px;}
+html[data-palette] .workspace > .notebook-panel {margin:16px 24px 20px;padding:18px 20px;background:color-mix(in srgb,var(--card) calc(var(--surface-opacity)*100%),transparent);border-radius:12px;}
+html[data-palette] .notebook-columns {grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);gap:24px;}
+html[data-palette] .notebook-panel textarea {background:color-mix(in srgb,var(--canvas) calc(var(--surface-opacity)*100%),transparent);font-size:12px;}
+html[data-palette] #detailSource,html[data-palette] #detailNotes {height:142px;min-height:120px;}
+html[data-palette] .primary-button,html[data-palette] .primary-icon-button {background:var(--today);color:var(--today-text);box-shadow:none;}
+html[data-palette] .primary-button {padding:8px 16px;border-radius:8px;}
+html[data-palette] .source-save-row p:empty {margin:0;}
+html[data-palette] .agenda-filters {background:var(--panel-subtle);}
+html[data-palette] .filter-pill.active {background:color-mix(in srgb,var(--card) calc(var(--surface-opacity)*100%),transparent);box-shadow:none;}
+html[data-palette] .search-box {background:color-mix(in srgb,var(--card) calc(var(--surface-opacity)*100%),transparent);}
+
+
+/* Compact native buttons: no framework dependency, keyboard focus remains visible. */
+#settingsDialog { max-height:min(640px,calc(100vh - 60px)); }
+#settingsDialog .settings-section { padding:12px 0; }
+#settingsDialog .setting-row { min-height:34px; }
+#settingsDialog h3 { margin-bottom:8px; }
+#themeControl > .segmented-control { grid-template-columns:minmax(0,1fr); }
+#settingsDialog #themeControl button { font-family:inherit; font-size:11px; font-weight:400; line-height:1.5; }
+#themeControl [data-theme="default"] { width:100%; text-align:center; }
+.theme-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:10px; }
+#themeControl .theme-card { position:relative; display:flex; align-items:center; gap:8px; min-width:0; min-height:52px; padding:8px; border:1px solid var(--line); border-radius:8px; color:var(--text); background:var(--panel-solid); text-align:left; font:inherit; font-size:11px; cursor:pointer; }
+#themeControl .theme-card:hover { background:var(--panel-subtle); }
+#themeControl .theme-card.active { border-color:var(--accent); box-shadow:inset 0 0 0 1px var(--accent); background:var(--accent-soft); }
+#themeControl button:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+.theme-sample { --sample-bg:#f4f7fb; --sample-card:#fff; --sample-accent:#3868a4; display:grid; grid-template-columns:repeat(3,1fr); gap:2px; width:38px; height:30px; flex:none; padding:9px 3px 3px; border-radius:4px; background:var(--sample-bg); border:1px solid #80808040; }
+.theme-sample i { background:var(--sample-card); border-radius:2px; }
+.theme-sample i:first-child { background:var(--sample-accent); }
+.sample-sage { --sample-bg:#e9eddf; --sample-card:#fffef9; --sample-accent:#557248; }
+.sample-lavender { --sample-bg:#eeeaf6; --sample-card:#fff; --sample-accent:#7656a5; }
+.sample-graphite { --sample-bg:#1e1e2e; --sample-card:#424256; --sample-accent:#b4befe; }
+@media(max-width:760px) {
+ html[data-palette] .agenda-panel { grid-template-columns:minmax(0,1fr); gap:16px; padding:16px; }
+ html[data-palette] .agenda-panel .notice-composer { padding:14px 0 0; }
+}
+@media(max-width:650px) {
+ html[data-palette] .calendar-panel { padding:12px 10px 8px; }
+ html[data-palette] .workspace > .notebook-panel { margin:12px 10px; padding:14px; }
+ html[data-palette] .notebook-columns { grid-template-columns:minmax(0,1fr); gap:16px; }
+ html[data-palette] .day-cell { padding:5px; }
+}

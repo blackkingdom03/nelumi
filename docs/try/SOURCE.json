@@ -1,0 +1,6 @@
+{
+  "repository": "https://github.com/blackkingdom03/nelumi",
+  "commit": "41d710029962515558d4143097f846c02f677794",
+  "license": "MIT",
+  "scope": "Renderer, notice parsing, calendar and lunar modules; isolated browser persistence adapter and responsive web layout. See THIRD_PARTY_NOTICES.md."
+}
