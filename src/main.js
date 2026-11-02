@@ -138,7 +138,7 @@ function applyWindowSettings() {
   mainWindow.setOpacity(1);
   mainWindow.setAlwaysOnTop(windowMode === 'top', 'floating');
   // Some Linux desktops have no tray host. Keep a taskbar entry as a recovery path.
-  mainWindow.setSkipTaskbar(process.platform === 'win32' && windowMode !== 'floating');
+  if (process.platform !== 'darwin') mainWindow.setSkipTaskbar(process.platform === 'win32' && windowMode !== 'floating');
   mainWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: false });
   mainWindow.setIgnoreMouseEvents(process.platform !== 'linux' && Boolean(clickThrough) && !settingsPanelOpen, { forward: true });
 }
@@ -277,7 +277,7 @@ function createTray() {
   try { tray = new Tray(createAppIcon().resize({ width: 20, height: 20 })); }
   catch (error) {
     console.warn('系统托盘不可用:', error.message);
-    mainWindow.setSkipTaskbar(false);
+    if (process.platform !== 'darwin') mainWindow.setSkipTaskbar(false);
     return;
   }
   tray.setToolTip('nelumi');
@@ -503,7 +503,7 @@ function registerIpc() {
 }
 
 app.whenReady().then(() => {
-  app.setAppUserModelId('local.deskcal.neisme');
+  if (process.platform === 'win32') app.setAppUserModelId('local.deskcal.neisme');
   if (process.platform === 'darwin') {
     Menu.setApplicationMenu(Menu.buildFromTemplate([
       { label: 'nelumi', submenu: [{ role: 'about' }, { type: 'separator' }, { role: 'hide' }, { role: 'quit' }] },
