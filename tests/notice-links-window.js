@@ -1,0 +1,31 @@
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+const {app,BrowserWindow,shell}=require('electron');
+const root=path.resolve(process.argv[2]||path.join(__dirname,'..'));
+const profile=path.join(root,'.test-profile-links-'+Date.now());fs.mkdirSync(profile,{recursive:true});app.setPath('userData',profile);app.setPath('sessionData',profile);
+for(const method of ['show','showInactive','focus','moveTop'])BrowserWindow.prototype[method]=function(){};
+const opened=[];shell.openExternal=async url=>{opened.push(url);};
+require(path.join(root,'src/main.js'));
+app.whenReady().then(async()=>{
+ let win;for(let i=0;i<100;i++){win=BrowserWindow.getAllWindows()[0];if(win&&await win.webContents.executeJavaScript("typeof state!=='undefined' && Boolean(document.querySelector('#detailSourceView'))").catch(()=>false))break;await new Promise(r=>setTimeout(r,50));}
+ const js=code=>win.webContents.executeJavaScript(code);
+ const until=async code=>{for(let i=0;i<100;i++){if(await js(code))return;await new Promise(r=>setTimeout(r,30));}throw Error(code+JSON.stringify(await js("({status:document.querySelector('#sourceStatus').textContent,text:document.querySelector('#detailSource').value,events:state.events})")));};
+ const source='通知：地址如下https://example.org/form?a=1&b=2。\n<img src=x onerror=alert(1)>\n请保留全文。';
+ await js(`(async()=>{state.events=[{id:'links-demo',title:'示例',date:'2026-10-25',allDay:true,sourceText:${JSON.stringify(source)},notes:'原笔记',calendarId:'personal',category:'work',recurrence:{frequency:'none'}}];await window.deskcal.saveEvents(state.events);render();NelumiNotebook.showEvent('links-demo','2026-10-25');})()`);
+ assert.equal(await js("document.querySelector('#detailSourceView').textContent"),source);
+ assert.equal(await js("document.querySelectorAll('#detailSourceView a').length"),1);
+ assert.equal(await js("document.querySelectorAll('#detailSourceView img').length"),0);
+ assert.equal(await js("document.querySelector('#detailSource').hidden"),true);
+ await js("document.querySelector('#detailSourceView a').click()");assert.deepEqual(opened,['https://example.org/form?a=1&b=2']);
+ assert.equal(await js("window.deskcal.openExternal('file:///C:/test').then(()=>false,()=>true)"),true);assert.equal(opened.length,1);
+ await js("document.querySelector('#editSourceButton').click()");assert.equal(await js("document.activeElement.id"),'detailSource');
+ const edited=source.replace('example.org/form?a=1&b=2','example.org/new');
+ await js(`document.querySelector('#detailSource').value=${JSON.stringify(edited)};document.querySelector('#detailSource').dispatchEvent(new Event('input',{bubbles:true}));document.querySelector('#detailSource').dispatchEvent(new Event('blur'))`);
+ await until("document.querySelector('#sourceStatus').textContent.includes('原文已保存')");
+ await js("document.querySelector('#editSourceButton').click()");assert.equal(await js("document.querySelector('#detailSourceView a').href"),'https://example.org/new');
+ const persisted=JSON.parse(fs.readFileSync(path.join(profile,'deskcal-data.json'),'utf8'));
+ assert.equal(persisted.events[0].sourceText,edited);assert.equal(persisted.events[0].notes,'原笔记');
+ await js("Object.defineProperty(navigator,'clipboard',{value:{writeText:async text=>{window.copiedText=text}},configurable:true});document.querySelector('#copySourceButton').click()");
+ assert.equal(await js('window.copiedText'),edited);
+ shell.openExternal=async()=>{throw Error('test failure');};await js("document.querySelector('#detailSourceView a').click()");await until("document.querySelector('#sourceStatus').textContent.includes('网址未能打开')");
+ console.log('Notice links native test passed: exact text, safe inline links, system-browser IPC, blocked file URLs, edit/autosave, full copy and open failure.');app.exit(0);
+}).catch(e=>{console.error(e);app.exit(1)});

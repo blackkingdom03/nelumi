@@ -1,0 +1,93 @@
+{
+  "name": "nelumi",
+  "version": "0.5.0",
+  "description": "Windows desktop calendar with local schedules and reminders",
+  "main": "src/portable-main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "check": "node --check src/main.js && node --check src/preload.js && node --check src/calendar-core.js && node --check src/chinese-calendar.js && node --check src/quick-input.js && node --check src/planner-core.js && node --check src/data-model.js && node --check src/renderer/app.js && node --check tests/electron-smoke.js && node --check src/notice-input.js && node --check src/renderer/navigation.js && node --check src/renderer/notebook.js && node --check src/notice-ocr.js",
+    "test": "node --test tests/*.test.js",
+    "test:layout": "electron tests/neisme-layout.js",
+    "test:settings": "electron tests/settings-window.js",
+    "dist:portable": "electron-builder --win --dir --x64",
+    "smoke": "electron tests/electron-smoke.js",
+    "dist:win": "electron-builder --win nsis --x64",
+    "test:navigation": "electron tests/navigation-window.js",
+    "test:notebook": "electron tests/notebook-window.js",
+    "test:ocr": "electron tests/notice-ocr-window.js"
+  },
+  "keywords": [
+    "calendar",
+    "reminder",
+    "windows",
+    "desktop"
+  ],
+  "author": "nelumi contributors",
+  "license": "MIT",
+  "homepage": "https://github.com/blackkingdom03/nelumi#readme",
+  "bugs": {
+    "url": "https://github.com/blackkingdom03/nelumi/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blackkingdom03/nelumi.git"
+  },
+  "config": {
+    "electron_mirror": "https://npmmirror.com/mirrors/electron/"
+  },
+  "devDependencies": {
+    "@tesseract.js-data/chi_sim": "1.0.0",
+    "@tesseract.js-data/eng": "1.0.0",
+    "electron": "43.2.0",
+    "electron-builder": "^26.15.3",
+    "tesseract.js": "7.0.0"
+  },
+  "dependencies": {
+    "lunar-javascript": "^1.7.7"
+  },
+  "build": {
+    "appId": "local.deskcal.neisme",
+    "productName": "nelumi",
+    "artifactName": "nelumi-Setup-${version}-${arch}.${ext}",
+    "copyright": "Copyright © 2026 DeskCal and nelumi contributors",
+    "asar": true,
+    "compression": "maximum",
+    "directories": {
+      "output": "release",
+      "buildResources": "assets"
+    },
+    "files": [
+      "src/**/*",
+      "assets/deskcal-icon.png",
+      "LICENSE",
+      "THIRD_PARTY_NOTICES.md",
+      "package.json"
+    ],
+    "win": {
+      "icon": "assets/deskcal-icon.ico",
+      "executableName": "nelumi",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true,
+      "shortcutName": "nelumi",
+      "deleteAppDataOnUninstall": false,
+      "installerIcon": "assets/deskcal-icon.ico",
+      "uninstallerIcon": "assets/deskcal-icon.ico",
+      "installerHeaderIcon": "assets/deskcal-icon.ico"
+    }
+  }
+}

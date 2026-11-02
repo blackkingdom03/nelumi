@@ -1,0 +1,52 @@
+const assert=require('node:assert/strict'),path=require('node:path'),fs=require('node:fs');
+const {app,BrowserWindow}=require('electron');
+const profile=path.resolve(`.test-profile-source-${Date.now()}`);fs.mkdirSync(profile);
+app.setPath('userData',profile);app.setPath('sessionData',profile);
+app.whenReady().then(async()=>{
+ const win=new BrowserWindow({show:false,width:1000,height:800,webPreferences:{sandbox:true,contextIsolation:true,backgroundThrottling:false}});
+ const root=path.resolve(process.argv[2]||'.');await win.loadFile(path.join(root,'src/renderer/index.html'));
+ const js=async s=>{try{return await win.webContents.executeJavaScript(s);}catch(error){throw Error(`${error.message}\n${s}`);}};
+ const until=async s=>{for(let i=0;i<100;i++){if(await js(s))return;await new Promise(r=>setTimeout(r,20));}throw Error(s);};
+ const input=async value=>js(`document.querySelector('#detailSource').value=${JSON.stringify(value)};document.querySelector('#detailSource').dispatchEvent(new Event('input',{bubbles:true}))`);
+ const save=async()=>{await js(`document.querySelector('#detailSource').dispatchEvent(new Event('blur'))`);await until(`!document.querySelector('#saveNotesButton').disabled`);};
+ await until(`typeof state!=='undefined' && !!state.settings.theme`);
+ assert.equal(await js(`document.querySelector('#detailSource').tagName`),'TEXTAREA');
+ assert.equal(await js(`document.querySelector('#copySourceButton')?.textContent`),'复制全文');
+ assert.equal(await js(`document.querySelector('#detailSource').disabled`),true);
+ await js(`state.events=['a','b'].map(id=>({id,title:'保留标题'+id,date:'2026-10-23',allDay:true,sourceText:'原通知'+id,notes:'原笔记',calendarId:'personal',category:'work',recurrence:{frequency:'none',interval:1},reminders:[],exceptions:[]}));render();NelumiNotebook.showEvent('a','2026-10-23');window.before=JSON.stringify(state.events);`);
+ const text='  修改后的通知\n\n<img src=x onerror=alert(1)>\n完整结尾  ';
+ await input(text);await js(`render();NelumiNotebook.showEvent('b','2026-10-23');NelumiNotebook.showEvent('a','2026-10-23')`);
+ assert.equal(await js(`document.querySelector('#detailSource').value`),text);
+ assert.equal(await js(`JSON.stringify(state.events)===window.before`),true,'typing is draft only');
+ assert.equal(await js(`document.querySelector('#detailSource img')`),null);
+ const domain=await js(`state.events`);await win.reload();await until(`typeof state!=='undefined' && !!state.settings.theme`);
+ await js(`state.events=${JSON.stringify(domain)};render();NelumiNotebook.showEvent('a','2026-10-23')`);
+ assert.equal(await js(`document.querySelector('#detailSource').value`),text,'draft survives reload');
+ await js(`Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async text=>{window.copiedSource=text;}}});document.querySelector('#copySourceButton').click()`);
+ await until(`document.querySelector('#sourceStatus').textContent==='全文已复制。'`);
+ assert.equal(await js(`window.copiedSource`),text,'copies current full draft including whitespace');
+ assert.equal(await js(`state.events[0].sourceText`),'原通知a','copy alone does not rewrite event');
+ await js(`navigator.clipboard.writeText=async()=>{throw Error('denied')};document.querySelector('#copySourceButton').click()`);
+ await until(`document.querySelector('#sourceStatus').textContent.includes('复制失败')`);
+ assert.equal(await js(`document.querySelector('#detailSource').value`),text);
+ await save();assert.equal(await js(`state.events[0].sourceText`),text);
+ assert.deepEqual(await js(`state.events.map(e=>[e.title,e.date,e.notes])`),domain.map(e=>[e.title,e.date,e.notes]));
+ await input('');await save();assert.equal(await js(`state.events[0].sourceText`),'','can clear source');
+ await input('字'.repeat(50001));await save();assert.equal(await js(`state.events[0].sourceText`),'');
+ assert.match(await js(`document.querySelector('#sourceStatus').textContent`),/50,000/);
+ await input('失败后重试');await js(`window.writer=window.deskcal.saveEvents;window.deskcal.saveEvents=async()=>{throw Error('模拟写入失败')};void 0`);await save();
+ assert.equal(await js(`state.events[0].sourceText`),'');assert.equal(await js(`document.querySelector('#detailSource').value`),'失败后重试');
+ await js(`window.deskcal.saveEvents=window.writer;void 0`);await save();
+ await input('提交版本');await js(`window.deskcal.saveEvents=events=>new Promise(resolve=>{window.finishWrite=async()=>resolve(await window.writer(events));});document.querySelector('#detailSource').dispatchEvent(new Event('blur'))`);
+ await until(`typeof window.finishWrite==='function'`);await input('更新的草稿');await js(`window.finishWrite()`);await until(`!document.querySelector('#saveNotesButton').disabled`);
+ assert.equal(await js(`state.events[0].sourceText`),'提交版本');assert.equal(await js(`document.querySelector('#detailSource').value`),'更新的草稿');
+ await js(`window.deskcal.saveEvents=window.writer;state.events[1].recurrence={frequency:'weekly',interval:1};NelumiNotebook.showEvent('b','2026-10-30')`);
+ await input('只改这次原文');await js(`document.querySelector('#detailSource').dispatchEvent(new Event('blur'))`);await until(`document.querySelector('#recurrenceScopeDialog').open`);
+ await js(`document.querySelector('[data-scope="occurrence"]').click()`);await until(`!document.querySelector('#saveNotesButton').disabled`);
+ assert.equal(await js(`state.events.find(e=>e.id==='b').sourceText`),'原通知b');
+ assert.equal(await js(`state.events.find(e=>e.id!=='a'&&e.id!=='b').sourceText`),'只改这次原文');
+ console.log('Source editor passed: drafts, reload, exact text/empty save, length limit, failure retry, newer edits, recurrence scope, preserved title/date/notes.');app.exit(0);
+}).catch(e=>{console.error(e);app.exit(1)});
+
+
+

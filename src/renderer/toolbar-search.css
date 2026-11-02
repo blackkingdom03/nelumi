@@ -1,0 +1,22 @@
+#toolbarSearchButton { flex: 0 0 29px; color: var(--text); }
+#toolbarSearchButton svg { width: 19px; height: 19px; stroke-width: 1.8; }
+#toolbarSearchButton[aria-expanded="true"] { color: var(--accent); background: var(--accent-soft); }
+#toolbarSearchPanel {
+  position: fixed; inset: auto; margin: 0; box-sizing: border-box;
+  width: min(360px, calc(100vw - 24px)); max-height: min(470px, calc(100vh - 24px));
+  padding: 12px; border: 1px solid var(--line); border-radius: 12px;
+  background: var(--panel-solid); color: var(--text);
+  box-shadow: 0 12px 32px rgba(25,36,52,.24); overflow-y: auto; scrollbar-width: thin;
+}
+#toolbarSearchPanel::backdrop { background: transparent; }
+.toolbar-search-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+#toolbarSearchLabel { font-size: 13px; font-weight: 700; }
+#toolbarSearchClose { font-size: 22px; line-height: 1; }
+#toolbarSearchInput { width: 100%; box-sizing: border-box; font-size: 13px; border-radius: 7px; padding: 9px 10px; }
+#toolbarSearchStatus, #toolbarSearchScope { color: var(--muted); font-size: 11px; line-height: 1.5; margin: 8px 0; }
+#toolbarSearchScope { border-top: 1px solid var(--line); padding-top: 8px; margin-bottom: 0; }
+.toolbar-search-result { width: 100%; display: flex; flex-direction: column; align-items: flex-start; text-align: left; gap: 4px; padding: 9px; margin: 2px 0; border: 0; border-radius: 7px; color: var(--text); background: transparent; }
+.toolbar-search-result:hover, .toolbar-search-result:focus-visible { background: var(--accent-soft); }
+.toolbar-search-result strong { font-size: 12px; font-weight: 600; overflow-wrap: anywhere; }
+.toolbar-search-result span { font-size: 11px; color: var(--muted); }
+#toolbarSearchPanel :focus-visible, #toolbarSearchButton:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }

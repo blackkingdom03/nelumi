@@ -1,0 +1,26 @@
+const {app,BrowserWindow}=require('electron'),fs=require('fs'),path=require('path'),assert=require('assert/strict');
+const root=path.resolve(__dirname,'..'),profile=path.join(root,'.test-profile-activity-'+Date.now());fs.mkdirSync(profile,{recursive:true});app.setPath('userData',profile);app.setPath('sessionData',profile);
+const source='活动名称：校园卡路里打卡赛\n报名时间：2026年10月27日至10月29日\n打卡活动时间：2026年10月30日至11月12日\n参与形式：线上个人打卡';
+app.whenReady().then(async()=>{
+ const w=new BrowserWindow({show:false,width:1100,height:800,webPreferences:{backgroundThrottling:false,sandbox:true,contextIsolation:true,nodeIntegration:false}});
+ await w.loadFile(path.join(root,'src/renderer/index.html'));const js=s=>w.webContents.executeJavaScript(s);
+ const wait=async s=>{for(let i=0;i<100;i++){if(await js(s))return;await new Promise(r=>setTimeout(r,30));}throw Error(s);};
+ await js('document.querySelector("#noticeInput").value='+JSON.stringify(source)+';document.querySelector("#noticeInput").dispatchEvent(new Event("input"));document.querySelector("#noticeForm").requestSubmit()');
+ await wait('document.querySelector("#eventDialog").open');assert.equal(await js('state.events.length'),0);
+ assert.equal(await js('document.querySelector("#eventRepeat").value'),'none');
+ await js('document.querySelector("#eventForm").requestSubmit()');
+ await wait('document.querySelector("#eventTitle").value.endsWith("报名截止")');assert.equal(await js('state.events.length'),0);
+ await js('document.querySelector("#eventForm").requestSubmit()');
+ await wait('document.querySelector("#eventRepeat").value==="daily"');
+ assert.equal(await js('document.querySelector("#eventDate").value'),'2026-10-30');
+ assert.equal(await js('document.querySelector("#eventRepeatUntil").value'),'2026-11-12');
+ assert.equal(await js('document.querySelector("#eventRepeatCount").value'),'');
+ await js('document.querySelector("#eventForm").requestSubmit()');await wait('state.events.length===3 && !document.querySelector("#eventDialog").open');
+ const events=await js('JSON.parse(JSON.stringify(state.events))');assert.equal(events[2].recurrence.until,'2026-11-12');assert.equal(events[2].recurrence.frequency,'daily');assert.ok(events.every(e=>e.sourceText===source));
+ await js('NelumiNavigation.selectDate("2026-11-05");render()');
+ assert.equal(await js('document.querySelectorAll("#agendaList .agenda-item").length'),1);
+ await js('document.querySelector("#undoNoticeButton").click()');await wait('activeEvents().length===0');
+ await js('document.querySelector("#redoNoticeButton").click()');await wait('activeEvents().length===3');
+ assert.equal(await js('state.events.find(e=>e.recurrence.frequency==="daily").recurrence.until'),'2026-11-12');
+ console.log('Activity UI passed: 3 review steps, atomic save, bounded daily repeat, source retained, undo/redo.');w.destroy();app.quit();
+}).catch(e=>{console.error(e);app.exit(1)});

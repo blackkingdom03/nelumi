@@ -1,0 +1,23 @@
+const {app,BrowserWindow}=require('electron'),fs=require('fs'),path=require('path'),assert=require('assert/strict');
+const root=path.resolve(process.argv[2]||path.join(__dirname,'..'));const profile=path.join(__dirname,'../.test-profile-highlights-'+Date.now());fs.mkdirSync(profile,{recursive:true});app.setPath('userData',profile);app.setPath('sessionData',profile);
+app.whenReady().then(async()=>{const w=new BrowserWindow({show:false,width:1100,height:800,webPreferences:{backgroundThrottling:false,sandbox:true,contextIsolation:true,nodeIntegration:false}});await w.loadFile(path.join(root,'src/renderer/index.html'));const js=c=>w.webContents.executeJavaScript(c);
+const text='项目讨论\n【时间】11月11日下午14:00\n【地点】第二会议室\n<img src=x onerror=alert(1)>\nhttps://example.org/2026/11/11';
+await js('window.fixture='+JSON.stringify(text));
+await js("document.querySelector('#noticeInput').value=fixture;document.querySelector('#noticeInput').dispatchEvent(new Event('input',{bubbles:true}));");
+assert.equal(await js("document.querySelector('#noticeHighlightPreview')===null"),true);assert.equal(await js("document.querySelector('#noticeInput').value"),text);
+assert.equal(await js("document.querySelector('#noticeInputHighlights').textContent"),text);
+assert.equal(await js("document.querySelectorAll('#noticeInputHighlights mark').length"),3);
+assert.equal(await js("document.querySelectorAll('#noticeInputHighlights img,#noticeInputHighlights a').length"),0);
+await js("document.querySelector('#noticeInput').focus();document.querySelector('#noticeInput').setSelectionRange(2,5)");
+await js("NelumiNotebook.render()");assert.deepEqual(await js("[document.querySelector('#noticeInput').selectionStart,document.querySelector('#noticeInput').selectionEnd]"),[2,5]);
+for(const theme of ['default','nord','sage','lavender','graphite']){await js('state.settings.theme='+JSON.stringify(theme)+';render()');for(const width of [1100,760,576]){w.setSize(width,800);for(let n=0;n<40;n++){await new Promise(r=>setTimeout(r,50));if(await js("document.querySelector('#noticeInput').clientWidth===document.querySelector('#noticeInputHighlights').clientWidth"))break;}assert.equal(await js("(()=>{const i=document.querySelector('#noticeInput'),h=document.querySelector('#noticeInputHighlights'),a=getComputedStyle(i),b=getComputedStyle(h);return i.clientWidth===h.clientWidth&&i.clientHeight===h.clientHeight&&a.fontSize===b.fontSize&&a.lineHeight===b.lineHeight&&a.paddingLeft===b.paddingLeft&&getComputedStyle(h.querySelector('mark')).fontWeight===a.fontWeight})()"),true,theme+' inline alignment');}}
+await js("document.querySelector('#noticeInput').value=(fixture+'\\n').repeat(30);document.querySelector('#noticeInput').dispatchEvent(new Event('input'));document.querySelector('#noticeInput').scrollTop=300;document.querySelector('#noticeInput').dispatchEvent(new Event('scroll'))");
+assert.equal(await js("document.querySelector('#noticeInputHighlights').scrollTop"),await js("document.querySelector('#noticeInput').scrollTop"));
+await js("document.querySelector('#noticeInput').value=fixture;document.querySelector('#noticeInput').dispatchEvent(new Event('input'))");
+await js("state.events=[{id:'highlight',title:'项目讨论',date:'2026-11-11',startTime:'14:00',allDay:false,calendarId:'personal',sourceText:fixture,location:'第二会议室',notes:'笔记保留',recurrence:{frequency:'none',interval:1}}];render();NelumiNotebook.showEvent('highlight','2026-11-11');");
+assert.equal(await js("document.querySelector('#detailSourceView').textContent"),text);assert.equal(await js("document.querySelector('#detailSourceView').hidden"),false);assert.equal(await js("document.querySelectorAll('#detailSourceView mark').length"),3);
+await js("document.querySelector('#editSourceButton').click()");assert.equal(await js("document.querySelector('#detailSource').hidden"),false);assert.equal(await js("document.querySelector('#detailSource').value"),text);
+await js("document.querySelector('#editSourceButton').click()");assert.equal(await js("document.querySelector('#detailSourceView').hidden"),false);assert.equal(await js("state.events[0].sourceText"),text);assert.equal(await js("state.events[0].notes"),'笔记保留');
+await js("document.querySelector('#noticeInput').value='';document.querySelector('#noticeInput').dispatchEvent(new Event('input',{bubbles:true}));");assert.equal(await js("document.querySelector('#noticeHighlightPreview')===null"),true);
+console.log('Highlight UI passed: no duplicate preview, source highlighting, unchanged source/notes, editing and clearing.');app.exit(0);
+}).catch(e=>{console.error(e);app.exit(1)});

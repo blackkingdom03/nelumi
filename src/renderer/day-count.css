@@ -1,0 +1,15 @@
+.day-cell {color:var(--text);font:inherit;cursor:pointer;}
+.day-cell:focus-visible {outline:2px solid var(--accent);outline-offset:-2px;}
+.day-cell .day-top,html[data-palette] .day-cell .day-top {align-items:center;min-height:22px;flex-basis:22px;}
+.day-indicators {margin-left:auto;display:flex;align-items:center;gap:4px;flex-shrink:0;}
+.day-indicators .day-badge {position:static;flex:none;}
+.day-cell .day-count {display:grid;place-items:center;flex:none;min-width:22px;height:22px;padding:0 4px;border:0;border-radius:50%;background:#B54E49;color:#fff;font:600 11px/22px "Microsoft YaHei",sans-serif;box-shadow:0 0 0 1px rgba(255,255,255,.75);cursor:pointer;white-space:nowrap;}
+.day-count:focus-visible {outline:2px solid var(--text);outline-offset:2px;}
+#dayCountPanel {position:fixed;inset:auto;margin:0;width:min(350px,calc(100vw - 16px));max-height:min(420px,calc(100vh - 16px));overflow-y:auto;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel-solid);color:var(--text);box-shadow:0 12px 32px #1924343d;}
+#dayCountPanel::backdrop {background:transparent;}
+.day-count-heading {display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.day-count-heading h3 {font-size:13px;margin:0;}
+.day-count-event {display:flex;flex-direction:column;gap:4px;width:100%;padding:10px 8px;border:0;border-radius:7px;background:transparent;color:var(--text);text-align:left;cursor:pointer;}
+.day-count-event:hover {background:var(--accent-soft);}
+.day-count-event strong {font-size:13px;white-space:normal;overflow-wrap:anywhere;}
+.day-count-event span {color:var(--muted);font-size:11px;white-space:normal;overflow-wrap:anywhere;}
