@@ -11,7 +11,7 @@
 <p align="center">
   <a href="https://github.com/blackkingdom03/nelumi/releases/latest"><strong>下载 Windows 版</strong></a>
   &nbsp;·&nbsp;
-  <a href="#试试这三条消息">试用示例</a>
+  <a href="https://blackkingdom03.github.io/nelumi/">网页预览</a>
   &nbsp;·&nbsp;
   <a href="#开始使用">使用指南</a>
   &nbsp;·&nbsp;
@@ -29,6 +29,34 @@
 **粘贴消息 → 提取事项、日期和地点 → 在日历中查看与提醒。**
 
 无需注册账号或配置 AI 密钥。文字提取与图片识别在本机完成。适合经常整理课程、讲座、会议、报名和个人纪念日的人。
+
+## 先看看用起来是什么样
+
+下面的截图和网页都用了虚构日程。点图片可以打开对应的网页预览，试着切换配色、点开事项。网页里的修改刷新后就会恢复；桌面提醒和图片识别请使用 Windows 版。
+
+### 日程、通知和笔记，放在一起
+
+上面看这个月的安排，下面看当天要做的事。粘贴通知后，日期、时间和地点会直接高亮。原文留着，旁边可以记下会前要准备的材料，回头不用再翻聊天记录。
+
+[![完整日历：月历、当天待办、通知原文和笔记](docs/images/calendar-overview.png)](https://blackkingdom03.github.io/nelumi/#overview)
+
+[打开完整日历预览 →](https://blackkingdom03.github.io/nelumi/#overview)
+
+### 一天有几件事，点数字就知道
+
+圆圈里的数字是当天事项数。点开后能看到每件事的名称和时间，有地点就一起显示。日历格子放不下的内容，在这里看全。
+
+[![当日事项弹窗：三项安排及会议地点](docs/images/day-events.png)](https://blackkingdom03.github.io/nelumi/#day)
+
+[打开当日事项预览 →](https://blackkingdom03.github.io/nelumi/#day)
+
+### 配色和显示方式，按自己的习惯来
+
+可以嵌在桌面上，也可以作为普通窗口或置顶显示。透明度随手调整，配色有默认、海盐蓝、抹茶绿、藤萝紫和曜石黑。设置面板可以拖动，调整时能直接看见效果。
+
+[![设置面板：显示方式、透明度和五种配色](docs/images/settings.png)](https://blackkingdom03.github.io/nelumi/#settings)
+
+[打开设置预览 →](https://blackkingdom03.github.io/nelumi/#settings)
 
 ## 从收到通知，到安排好下一件事
 
@@ -165,6 +193,8 @@ nelumi 基于 [DeskCal](https://github.com/kangkangStudent/DeskCal) 定制，界
 OCR 引擎、模型、Electron 和历表数据各有相应许可证或使用条款；本仓库的 MIT 许可证不替代它们。完整出处、版本与复用范围请阅读 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
 
 ## 一起让通知更好整理
+
+我会不定期更新这个项目，修复问题，也慢慢补上用得着的功能。新版本和改动会写在[发布记录](https://github.com/blackkingdom03/nelumi/releases)里。
 
 如果某段通知没有正确识别，欢迎提交[问题反馈](https://github.com/blackkingdom03/nelumi/issues/new?template=bug_report.yml)，附上去除个人信息后的示例。希望增加功能，可以提交[功能建议](https://github.com/blackkingdom03/nelumi/issues/new?template=feature_request.yml)。
 
